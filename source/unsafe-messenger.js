@@ -73,6 +73,8 @@ export default function unsafeMessenger() {
 			editor.blur();
 		});
 	}
+
+  console.log('Unsafe messenger injected.');
 }
 
 // eslint-disable-next-line no-unused-expressions

@@ -155,4 +155,26 @@ function init() {
 	});
 }
 
+function onHeadersReceived(details) {
+  const { responseHeaders: headers } = details;
+
+  for (const h of headers) {
+    if (h.name === 'content-security-policy') {
+      if (h.value.includes("'unsafe-inline'")) {
+        console.log('Updating response header, original value is:\n', h.value);
+        h.value = h.value.replace("'unsafe-inline'", "'sha256-cg+6GXyBpCkQ18vJyoMqYJT4YF0aZRRn/vOdk6rI/P8=' 'unsafe-inline'");
+      }
+    }
+  }
+  // console.log('Updated headers', headers);
+  return {responseHeaders: headers};
+}
+
+const filter = {
+  urls: [
+    'https://www.blogger.com/blog/post/edit/*',
+  ]
+};
+browser.webRequest.onHeadersReceived.addListener(onHeadersReceived, filter, ['blocking', 'responseHeaders']);
+
 init();

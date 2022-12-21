@@ -314,6 +314,9 @@ function stopGT() {
 function init() {
 	const script = document.createElement('script');
 	script.textContent = '(' + unsafeMessenger.toString() + ')()';
+
+  // console.log('Try to inject unsafe <script>');
+  // console.log(script.textContent);
 	document.head.append(script);
 }
 
