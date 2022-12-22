@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.32.0/codemirror.min.css" />
+  <title>GhostText testing</title>
+
+  <meta http-equiv="Content-Security-Policy" content="script-src 'nonce-FAKE' 'unsafe-inline'" />
+  <!-- <meta http-equiv="Content-Security-Policy" content="script-src 'nonce-FAKE' 'unsafe-inline' 'sha256-cg+6GXyBpCkQ18vJyoMqYJT4YF0aZRRn/vOdk6rI/P8='" /> -->
+</head>
+
+<body>
+  <textarea id="codemirror-field" class="field">
+  This is a CodeMirror field
+
+
+
+
+  </textarea>
+
+  <script nonce='FAKE' src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.32.0/codemirror.min.js"></script>
+  <script nonce='FAKE'>
+    const cm = window.CodeMirror.fromTextArea(document.getElementById('codemirror-field'), {
+      lineNumbers: true,
+      gutters: ['CodeMirror-linenumbers'],
+    });
+    cm.on('gutterClick', (cm, line) => {
+      const info = cm.getLineHandle(line);
+      if (info.widgets) {
+        info.widgets.map(w => {
+          const node = w.node;
+          w.clear();
+          node.parentNode.removeChild(node);
+        });
+      } else {
+        const msg = document.createElement('textarea');
+        msg.select();
+        msg.setRangeText('This is a textarea as CodeMirror line widget');
+        cm.addLineWidget(line, msg, {coverGutter: false, noHScroll: true});
+      }
+    });
+  </script>
+</body>
+</html>
